@@ -23,42 +23,45 @@ public class DemoTest {
 
     @Test
     public void shouldReturnYes_whenFileInput() {
+        //given
         Parser parser = new Parser(ihf
                 .getInputHandler(new String[]{"src/main/resources/data/data1.txt"}).getInput());
 
         Architecture architecture = parser.parse();
+        //when
         Builder builder = new Builder(architecture);
-
-
         String expected = "yes";
         String actual = builder.canBuild() ? "yes" : "no";
+        //then
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnNo_whenFileInput() {
+        //given
         Parser parser = new Parser(ihf
                 .getInputHandler(new String[]{"src/main/resources/data/data2.txt"}).getInput());
 
         Architecture architecture = parser.parse();
+        //when
         Builder builder = new Builder(architecture);
-
-
         String expected = "no";
         String actual = builder.canBuild() ? "yes" : "no";
+        //then
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnYes_whenManualInput() {
-        String in = "6 3"+System.lineSeparator() +
-                "101101"+System.lineSeparator() +
-                "111111"+System.lineSeparator() +
-                "111111"+System.lineSeparator() +
-                "3"+System.lineSeparator() +
-                "1 1 4"+System.lineSeparator() +
-                "2 1 6"+System.lineSeparator() +
-                "1 3 1"+System.lineSeparator()+
+        //given
+        String in = "6 3" + System.lineSeparator() +
+                "101101" + System.lineSeparator() +
+                "111111" + System.lineSeparator() +
+                "111111" + System.lineSeparator() +
+                "3" + System.lineSeparator() +
+                "1 1 4" + System.lineSeparator() +
+                "2 1 6" + System.lineSeparator() +
+                "1 3 1" + System.lineSeparator() +
                 System.lineSeparator();
         input = new ByteArrayInputStream(in.getBytes());
         System.setIn(input);
@@ -66,24 +69,26 @@ public class DemoTest {
                 .getInputHandler(new String[]{"null"}).getInput());
 
         Architecture architecture = parser.parse();
+        //when
         Builder builder = new Builder(architecture);
-
 
         String expected = "yes";
         String actual = builder.canBuild() ? "yes" : "no";
+        //then
         Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void shouldReturnNo_whenManualInput() {
-        String in = "6 3"+System.lineSeparator() +
-                "001100"+System.lineSeparator() +
-                "110011"+System.lineSeparator() +
-                "111111"+System.lineSeparator() +
-                "3"+System.lineSeparator() +
-                "2 2 3"+System.lineSeparator() +
-                "1 3 1"+System.lineSeparator() +
-                "1 4 90"+System.lineSeparator()+
+        //given
+        String in = "6 3" + System.lineSeparator() +
+                "001100" + System.lineSeparator() +
+                "110011" + System.lineSeparator() +
+                "111111" + System.lineSeparator() +
+                "3" + System.lineSeparator() +
+                "2 2 3" + System.lineSeparator() +
+                "1 3 1" + System.lineSeparator() +
+                "1 4 90" + System.lineSeparator() +
                 System.lineSeparator();
         input = new ByteArrayInputStream(in.getBytes());
         System.setIn(input);
@@ -91,11 +96,11 @@ public class DemoTest {
                 .getInputHandler(new String[]{"null"}).getInput());
 
         Architecture architecture = parser.parse();
+        //when
         Builder builder = new Builder(architecture);
-
-
         String expected = "no";
         String actual = builder.canBuild() ? "yes" : "no";
+        //then
         Assert.assertEquals(expected, actual);
     }
 
