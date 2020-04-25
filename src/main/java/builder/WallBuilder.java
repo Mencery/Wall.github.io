@@ -25,7 +25,7 @@ public class WallBuilder implements Builder {
      */
     @Override
     public boolean canBuild() {
-        brickPositionMap  = new WallSplitter(architecture).divideOnPart();
+        brickPositionMap = new WallSplitter(architecture).divideOnPart();
 
         if (brickPositionMap.keySet().size() != architecture.getBricks().size()) {
             return false;
@@ -40,33 +40,13 @@ public class WallBuilder implements Builder {
      * @return true if wall can be built
      */
     private boolean iterateOverCombinations() {
-        Wall wall = architecture.getWall();
-        Matrix wallMatrix = new Matrix(wall.getMatrix(), wall.getHeight(), wall.getWidth());
-        int square = wallMatrix.getSquare();
         int brickSize = architecture.getBricks().size();
         int[] counters = new int[brickSize];
 
         for (int i = 0; i < getAmountCombination(); i++) {
-            if (checkSquare(counters, square)) {
-                int[][] combinations = getCombinationsMatrix(counters);
-                while (incrementCombinationsMatrix(combinations)) {
-                    List<Cell> addedList = new ArrayList<>();
-                    for (int k = 0; k < brickSize; k++) {
-                        Brick brick = architecture.getBricks().get(k);
-                        for (int l = 0; l < combinations[k].length; l++) {
-                            if (!isIntersect(addedList, brickPositionMap.get(brick).get(combinations[k][l]))) {
-                                addedList.addAll(brickPositionMap.get(brick).get(combinations[k][l]));
-                            }
-                        }
-
-                    }
-                    Matrix matrix = new Matrix(addedList, wall.getHeight(), wall.getWidth());
-                    if (wallMatrix.equals(matrix)) {
-                        return true;
-                    }
-                }
+            if (checkCombination(counters)) {
+                return true;
             }
-
             for (int j = 0; j < brickSize; j++) {
                 counters[j]++;
                 if (counters[j] <= architecture.getBricks().get(j).getAmount())
@@ -79,8 +59,34 @@ public class WallBuilder implements Builder {
         return false;
     }
 
+    private boolean checkCombination(int[] counters) {
+        Wall wall = architecture.getWall();
+        Matrix wallMatrix = new Matrix(wall.getMatrix(), wall.getHeight(), wall.getWidth());
+        int square = wallMatrix.getSquare();
+        int brickSize = architecture.getBricks().size();
+        if (checkSquare(counters, square)) {
+            int[][] combinations = getCombinationsMatrix(counters);
+            while (incrementCombinationsMatrix(combinations)) {
+                List<Cell> addedList = new ArrayList<>();
+                for (int k = 0; k < brickSize; k++) {
+                    Brick brick = architecture.getBricks().get(k);
+                    for (int l = 0; l < combinations[k].length; l++) {
+                        if (!isIntersect(addedList, brickPositionMap.get(brick).get(combinations[k][l]))) {
+                            addedList.addAll(brickPositionMap.get(brick).get(combinations[k][l]));
+                        }
+                    }
+
+                }
+                Matrix matrix = new Matrix(addedList, wall.getHeight(), wall.getWidth());
+                if (wallMatrix.equals(matrix)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
-     *
      * @param combinations - matrix of cell numbers that use in combinations
      * @return true if search is not completed yet
      */
@@ -130,7 +136,6 @@ public class WallBuilder implements Builder {
     }
 
     /**
-     *
      * @param counters - for bricks
      * @return matrix of cell numbers that use in combinations
      */
@@ -147,8 +152,7 @@ public class WallBuilder implements Builder {
     }
 
     /**
-     *
-     * @param counters - for bricks
+     * @param counters   - for bricks
      * @param wallSquare - amount of "1" in wall
      * @return true if amount of "1" in wall equals amount of "1" in bricks
      */
@@ -173,7 +177,7 @@ public class WallBuilder implements Builder {
         architecture.getBricks().forEach(brick -> {
             int brickSquare = brick.getHeight() * brick.getWidth();
             if (brickSquare * brick.getAmount() > square) {
-                brick.setAmount((int) Math.ceil(square / (double)brickSquare));
+                brick.setAmount((int) Math.ceil(square / (double) brickSquare));
             }
         });
     }
